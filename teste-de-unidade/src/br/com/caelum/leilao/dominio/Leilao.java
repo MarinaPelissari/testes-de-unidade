@@ -18,14 +18,11 @@ public class Leilao {
 		lances.add(lance);
 	}
 
-	public String getDescricao() {
+	public String descricao() {
 		return descricao;
 	}
 
-	public List<Lance> getLances() {
+	public List<Lance> lances() {
 		return Collections.unmodifiableList(lances);
 	}
-
-	
-	
 }
