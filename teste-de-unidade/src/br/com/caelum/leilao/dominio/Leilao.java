@@ -13,6 +13,18 @@ public class Leilao {
 		this.descricao = descricao;
 		this.lances = new ArrayList<Lance>();
 	}
+
+	private Lance ultimoLanceDado() {
+		return lances.get(lances.size()-1);
+	}
+
+	public String descricao() {
+		return descricao;
+	}
+
+	public List<Lance> lances() {
+		return Collections.unmodifiableList(lances);
+	}
 	
 	public void propoe(Lance lance) {
 		if(lances.isEmpty() || podeDarUmLance(lance.usuario())) {
@@ -33,15 +45,4 @@ public class Leilao {
 		return totalLancesPorUsuario;
 	}
 
-	private Lance ultimoLanceDado() {
-		return lances.get(lances.size()-1);
-	}
-
-	public String descricao() {
-		return descricao;
-	}
-
-	public List<Lance> lances() {
-		return Collections.unmodifiableList(lances);
-	}
 }
