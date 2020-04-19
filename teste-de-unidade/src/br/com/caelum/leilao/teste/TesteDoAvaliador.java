@@ -32,6 +32,46 @@ public class TesteDoAvaliador {
         assertEquals(250.0, leiloeiro.menorLance(), 0.00001);
     }
 
+    @Test 
+    public void lancesEmOrdemAleatoria() {
+        Usuario miguel = new Usuario("Miguel");
+        Usuario joana = new Usuario("Joana");
+        Usuario flavia = new Usuario("Flavia");
+
+        Leilao leilao = new Leilao("Nintendo 64");
+
+        leilao.propoe(new Lance(flavia, 200));
+        leilao.propoe(new Lance(joana, 450));
+        leilao.propoe(new Lance(joana, 120));
+        leilao.propoe(new Lance(miguel, 700));
+        leilao.propoe(new Lance(flavia, 630));
+        leilao.propoe(new Lance(miguel, 230));
+
+        Avaliador leiloeiro = new Avaliador();
+        leiloeiro.avalia(leilao);
+
+        assertEquals(120.0, leiloeiro.menorLance(), 0.0001);
+        assertEquals(700.0, leiloeiro.maiorLance(), 0.0001);
+    }
+
+    @Test 
+    public void lancesEmOrdemDescrescente() {
+        Usuario miguel = new Usuario("Miguel");
+        Usuario joana = new Usuario("Joana");
+        Usuario flavia = new Usuario("Flavia");
+
+        Leilao leilao = new Leilao("Nintendo 64");
+
+        leilao.propoe(new Lance(flavia, 400));
+        leilao.propoe(new Lance(joana, 200));
+        leilao.propoe(new Lance(joana, 300));
+        leilao.propoe(new Lance(miguel, 100));
+
+        Avaliador leiloeiro = new Avaliador();
+        leiloeiro.avalia(leilao);
+
+        assertEquals(100.0, leiloeiro.menorLance(), 0.0001);
+        assertEquals(400.0, leiloeiro.maiorLance(), 0.0001);
     }
 
     @Test
