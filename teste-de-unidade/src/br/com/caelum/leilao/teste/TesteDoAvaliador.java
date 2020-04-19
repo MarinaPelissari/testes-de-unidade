@@ -54,10 +54,29 @@ public class TesteDoAvaliador {
 
     @Test
     public void mediaDosLancesZero() {
+        Leilao leilao = new Leilao("Nintendo Switch");
+
+        Avaliador leiloeiro = new Avaliador();
+        leiloeiro.avalia(leilao);
+
+        assertEquals(0, leiloeiro.mediaDosLances(), 0.0001);
+    }
+
+    @Test
+    public void leilaoComApenasUmLance() {
         Usuario joao = new Usuario("João");
 
         Leilao leilao = new Leilao("Notebook gamer");
 
+        leilao.propoe(new Lance(joao, 1000.0));
+
+        Avaliador leiloeiro = new Avaliador();
+        leiloeiro.avalia(leilao);
+
+        assertEquals(1000.0, leiloeiro.maiorLance(), 0.00001);
+        assertEquals(1000.0, leiloeiro.menorLance(), 0.00001);
+        assertEquals(1000.0, leiloeiro.mediaDosLances(), 0.00001);
+    }
         Avaliador leiloeiro = new Avaliador();
         leiloeiro.avalia(leilao);
 
