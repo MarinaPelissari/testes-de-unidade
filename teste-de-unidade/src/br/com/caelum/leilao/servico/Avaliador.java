@@ -9,18 +9,19 @@ public class Avaliador {
     private double media = 0;
 
     public void avalia(Leilao leilao) {
-
-
         double total = 0;
+
         for(Lance lance : leilao.lances()) {
             if(lance.valor() > maiorDeTodos) maiorDeTodos = lance.valor();
             if(lance.valor() < menorDeTodos) menorDeTodos = lance.valor();
             total += lance.valor();
         }
+
         if(total == 0) {
             media = 0;
             return;
         }
+
         media = total / leilao.lances().size();
     }
 
