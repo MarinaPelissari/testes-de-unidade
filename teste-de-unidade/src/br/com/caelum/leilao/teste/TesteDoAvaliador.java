@@ -1,6 +1,9 @@
 package br.com.caelum.leilao.teste;
 
-import org.junit.Assert;
+import static org.junit.Assert.assertEquals;
+
+import java.util.List;
+
 import org.junit.Test;
 
 import br.com.caelum.leilao.dominio.Lance;
@@ -11,7 +14,7 @@ import br.com.caelum.leilao.servico.Avaliador;
 public class TesteDoAvaliador {
 
     @Test
-    public void deveEntenderLancesEmOrdemCrescente() {
+    public void lancesEmOrdemCrescente() {
         Usuario joao = new Usuario("João");
         Usuario jose = new Usuario("José");
         Usuario maria = new Usuario("Maria");
@@ -25,8 +28,10 @@ public class TesteDoAvaliador {
         Avaliador leiloeiro = new Avaliador();
         leiloeiro.avalia(leilao);
 
-        Assert.assertEquals(400.0, leiloeiro.maiorLance(), 0.00001);
-        Assert.assertEquals(250.0, leiloeiro.menorLance(), 0.00001);
+        assertEquals(400.0, leiloeiro.maiorLance(), 0.00001);
+        assertEquals(250.0, leiloeiro.menorLance(), 0.00001);
+    }
+
     }
 
     @Test
@@ -44,18 +49,18 @@ public class TesteDoAvaliador {
         Avaliador leiloeiro = new Avaliador();
         leiloeiro.avalia(leilao);
 
-        Assert.assertEquals(316.66, leiloeiro.mediaDosLances(), 1);
+        assertEquals(316.66, leiloeiro.mediaDosLances(), 1);
     }
 
     @Test
     public void mediaDosLancesZero() {
         Usuario joao = new Usuario("João");
 
-        Leilao leilao = new Leilao("Nintendo Switch");
+        Leilao leilao = new Leilao("Notebook gamer");
 
         Avaliador leiloeiro = new Avaliador();
         leiloeiro.avalia(leilao);
 
-        Assert.assertEquals(0, leiloeiro.mediaDosLances(), 0.0001);
+        assertEquals(0, maiores.size());
     }
 }
