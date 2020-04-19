@@ -117,8 +117,59 @@ public class TesteDoAvaliador {
         assertEquals(1000.0, leiloeiro.menorLance(), 0.00001);
         assertEquals(1000.0, leiloeiro.mediaDosLances(), 0.00001);
     }
+
+    @Test
+    public void deveEncontrarOsTresMaioresLances() {
+        Usuario joao = new Usuario("João");
+        Usuario maria = new Usuario("Maria");
+
+        Leilao leilao = new Leilao("Playstation 3 Novo");
+
+        leilao.propoe(new Lance(joao, 100.0));
+        leilao.propoe(new Lance(maria, 200.0));
+        leilao.propoe(new Lance(joao, 300.0));
+        leilao.propoe(new Lance(maria, 400.0));
+        leilao.propoe(new Lance(maria, 500.0));
+
         Avaliador leiloeiro = new Avaliador();
         leiloeiro.avalia(leilao);
+
+        List<Lance> maiores = leiloeiro.tresMaioresLances();
+
+        assertEquals(3, maiores.size());
+        assertEquals(500.0, maiores.get(0).valor(), 0.00001);
+        assertEquals(400.0, maiores.get(1).valor(), 0.00001);
+        assertEquals(300.0, maiores.get(2).valor(), 0.00001);
+    }
+
+    @Test
+    public void deveEncontrarOsMaioresLancesEmUmLeilaoComDoisLances() {
+        Usuario joao = new Usuario("João");
+        Usuario maria = new Usuario("Maria");
+
+        Leilao leilao = new Leilao("Playstation 3 Novo");
+
+        leilao.propoe(new Lance(joao, 100.0));
+        leilao.propoe(new Lance(maria, 200.0));
+
+        Avaliador leiloeiro = new Avaliador();
+        leiloeiro.avalia(leilao);
+
+        List<Lance> maiores = leiloeiro.tresMaioresLances();
+
+        assertEquals(2, maiores.size());
+        assertEquals(200.0, maiores.get(0).valor(), 0.00001);
+        assertEquals(100.0, maiores.get(1).valor(), 0.00001);
+    }
+
+    @Test
+    public void naoDeveEncontrarNenhumMaiorLanceEmUmLeilaoSemLances() {
+        Leilao leilao = new Leilao("Playstation 3 Novo");
+
+        Avaliador leiloeiro = new Avaliador();
+        leiloeiro.avalia(leilao);
+
+        List<Lance> maiores = leiloeiro.tresMaioresLances();
 
         assertEquals(0, maiores.size());
     }
