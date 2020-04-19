@@ -74,5 +74,17 @@ public class TesteLeilao {
         assertEquals(10, leilao.lances().size());
         assertEquals(11000.0, leilao.lances().get(leilao.lances().size()-1).valor());
     }
+    
+    @Test
+    public void deveDobrarOUltimoLanceDado() {
+        Leilao leilao = new Leilao("Macbook Pro 15");
+        Usuario steveJobs = new Usuario("Steve Jobs");
+        Usuario billGates = new Usuario("Bill Gates");
+
+        leilao.propoe(new Lance(steveJobs, 2000));
+        leilao.propoe(new Lance(billGates, 3000));
+        leilao.dobraLance(steveJobs);
+
+        assertEquals(4000, leilao.lances().get(2).valor(), 0.00001);
     }
 }
