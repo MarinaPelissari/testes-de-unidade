@@ -87,4 +87,15 @@ public class TesteLeilao {
 
         assertEquals(4000, leilao.lances().get(2).valor(), 0.00001);
     }
+
+    @Test
+    public void naoDobraLanceSeNaoHouverLance() {
+        Leilao leilao = new Leilao("Macbook Pro");
+        
+        Usuario steve = new Usuario("Steve Jobs");
+
+        leilao.dobraLance(steve);
+
+        assertEquals(0, leilao.lances().size());
+	}
 }

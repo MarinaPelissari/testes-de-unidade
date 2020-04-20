@@ -46,11 +46,18 @@ public class Leilao {
 	}
 
 	public void dobraLance(Usuario usuario) {
-        Lance ultimo = null;
+		Lance ultimoLance = ultimoLanceDo(usuario);
+		if(ultimoLance != null) {
+			propoe(new Lance(usuario, ultimoLance.valor() * 2));
+		}
+    }
+
+    private Lance ultimoLanceDo(Usuario usuario) {
+        Lance ultimoLance = null;
         for(Lance lance : lances) {
-            if(lance.usuario().equals(usuario)) ultimo = lance;
+            if(lance.usuario().equals(usuario)) ultimoLance = lance;
         }
 
-        propoe(new Lance(usuario, ultimo.valor()*2));
+        return ultimoLance;
     }
 }
