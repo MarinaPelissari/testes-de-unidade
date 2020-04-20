@@ -47,8 +47,8 @@ public class TesteLeilao {
         assertEquals(2000.0, leilao.lances().get(0).valor());
     }
 
-	@Test
-	public void naoDeveAceitarMaisDoQue5LancesDoMesmoUsuario() {
+    @Test
+    public void naoDeveAceitarMaisDoQue5LancesDoMesmoUsuario() {
         Leilao leilao = new Leilao("Macbook Pro");
 
         Usuario steve = new Usuario("Steve Jobs");
@@ -56,7 +56,7 @@ public class TesteLeilao {
 
         leilao.propoe(new Lance(steve, 2000.0));
         leilao.propoe(new Lance(vicente, 3000.0));
-        
+
         leilao.propoe(new Lance(steve, 4000.0));
         leilao.propoe(new Lance(vicente, 5000.0));
 
@@ -72,9 +72,9 @@ public class TesteLeilao {
         leilao.propoe(new Lance(steve, 12000.0));
 
         assertEquals(10, leilao.lances().size());
-        assertEquals(11000.0, leilao.lances().get(leilao.lances().size()-1).valor());
+        assertEquals(11000.0, leilao.lances().get(leilao.lances().size() - 1).valor());
     }
-    
+
     @Test
     public void deveDobrarOUltimoLanceDado() {
         Leilao leilao = new Leilao("Macbook Pro 15");
@@ -91,11 +91,11 @@ public class TesteLeilao {
     @Test
     public void naoDobraLanceSeNaoHouverLance() {
         Leilao leilao = new Leilao("Macbook Pro");
-        
+
         Usuario steve = new Usuario("Steve Jobs");
 
         leilao.dobraLance(steve);
 
         assertEquals(0, leilao.lances().size());
-	}
+    }
 }
