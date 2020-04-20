@@ -32,26 +32,24 @@ public class TesteDoAvaliador {
         assertEquals(250.0, leiloeiro.menorLance(), 0.00001);
     }
 
-    @Test 
-    public void lancesEmOrdemAleatoria() {
-        Usuario miguel = new Usuario("Miguel");
-        Usuario joana = new Usuario("Joana");
-        Usuario flavia = new Usuario("Flavia");
+    @Test
+    public void deveEntenderLeilaoComLancesEmOrdemRandomica() {
+        Usuario joao = new Usuario("Joao"); 
+        Usuario maria = new Usuario("Maria"); 
+        Leilao leilao = new Leilao("Playstation 3 Novo");
 
-        Leilao leilao = new Leilao("Nintendo 64");
-
-        leilao.propoe(new Lance(flavia, 200));
-        leilao.propoe(new Lance(joana, 450));
-        leilao.propoe(new Lance(joana, 120));
-        leilao.propoe(new Lance(miguel, 700));
-        leilao.propoe(new Lance(flavia, 630));
-        leilao.propoe(new Lance(miguel, 230));
+        leilao.propoe(new Lance(joao,200.0));
+        leilao.propoe(new Lance(maria,450.0));
+        leilao.propoe(new Lance(joao,120.0));
+        leilao.propoe(new Lance(maria,700.0));
+        leilao.propoe(new Lance(joao,630.0));
+        leilao.propoe(new Lance(maria,230.0));
 
         Avaliador leiloeiro = new Avaliador();
         leiloeiro.avalia(leilao);
 
-        assertEquals(120.0, leiloeiro.menorLance(), 0.0001);
         assertEquals(700.0, leiloeiro.maiorLance(), 0.0001);
+        assertEquals(120.0, leiloeiro.menorLance(), 0.0001);
     }
 
     @Test 
@@ -129,7 +127,6 @@ public class TesteDoAvaliador {
         leilao.propoe(new Lance(maria, 200.0));
         leilao.propoe(new Lance(joao, 300.0));
         leilao.propoe(new Lance(maria, 400.0));
-        leilao.propoe(new Lance(maria, 500.0));
 
         Avaliador leiloeiro = new Avaliador();
         leiloeiro.avalia(leilao);
@@ -137,9 +134,9 @@ public class TesteDoAvaliador {
         List<Lance> maiores = leiloeiro.tresMaioresLances();
 
         assertEquals(3, maiores.size());
-        assertEquals(500.0, maiores.get(0).valor(), 0.00001);
-        assertEquals(400.0, maiores.get(1).valor(), 0.00001);
-        assertEquals(300.0, maiores.get(2).valor(), 0.00001);
+        assertEquals(400.0, maiores.get(0).valor(), 0.00001);
+        assertEquals(300.0, maiores.get(1).valor(), 0.00001);
+        assertEquals(200.0, maiores.get(2).valor(), 0.00001);
     }
 
     @Test
