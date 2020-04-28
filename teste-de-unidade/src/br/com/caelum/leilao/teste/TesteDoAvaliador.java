@@ -1,6 +1,7 @@
 package br.com.caelum.leilao.teste;
 
-import static org.junit.Assert.assertEquals;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.*;
 
 import java.util.List;
 
@@ -15,8 +16,9 @@ import br.com.caelum.leilao.servico.Avaliador;
 
 public class TesteDoAvaliador {
     private Avaliador leiloeiro;
-    private Usuario joao;
     private Usuario maria;
+    private Usuario jose;
+    private Usuario joao;
 
     @Before
     public void criaAvaliador() {
@@ -25,144 +27,125 @@ public class TesteDoAvaliador {
         this.maria = new Usuario("Maria");
     }
 
+    @Test(expected = RuntimeException.class)
+    public void naoDeveAvaliarLeilaoSemLance() {
+        Leilao leilao = new CriadorDeLeilao().para("PlayStation 3").constroi();
+
+        leiloeiro.avalia(leilao);
+    }
+
     @Test
     public void lancesEmOrdemCrescente() {
+        Leilao leilao = new CriadorDeLeilao().para("Playstation3").lance(joao, 1000.0).lance(maria, 2000.0)
+                .lance(jose, 3000.0).constroi();
+
+        leiloeiro.avalia(leilao);
+
+        assertThat(leiloeiro.maiorLance(), is(3000.0));
+        assertThat(leiloeiro.menorLance(), is(1000.0));
+    }
+
+    @Test
+    public void deveEntenderLancesEmOrdemCrescenteComOutrosValores() {
         Usuario joao = new Usuario("João");
         Usuario jose = new Usuario("José");
         Usuario maria = new Usuario("Maria");
 
-        Leilao leilao = new Leilao("Playstation 3 Novo");
-
-        leilao.propoe(new Lance(joao, 250.0));
-        leilao.propoe(new Lance(jose, 300.0));
-        leilao.propoe(new Lance(maria, 400.0));
-    @Test
-    public void lancesEmOrdemCrescente() {
-        Leilao leilao = new CriadorDeLeilao().para("Playstation3")
-                .lance(joao, 100)
-                .lance(maria, 200)
-                .lance(joao, 300)
-                .lance(maria, 400)
-                .constroi();
+        Leilao leilao = new CriadorDeLeilao().para("Playstation 3 Novo").lance(joao, 1000.0).lance(jose, 2000.0)
+                .lance(maria, 3000.0).constroi();
 
         leiloeiro.avalia(leilao);
 
-        assertEquals(400.0, leiloeiro.maiorLance(), 0.00001);
-        assertEquals(100.0, leiloeiro.menorLance(), 0.00001);
+        assertThat(leiloeiro.maiorLance(), is(3000.0));
+        assertThat(leiloeiro.menorLance(), is(1000.0));
     }
 
     @Test
-    public void deveEntenderLeilaoComLancesEmOrdemRandomica() {
-        Leilao leilao = new CriadorDeLeilao().para("Playstation3")
-                .lance(joao, 200)
-                .lance(maria, 450)
-                .lance(joao, 120)
-                .lance(maria, 700)
-                .lance(maria, 630)
-                .lance(maria, 230)
-                .constroi();
+    public void lancesEmOrdemRandomica() {
+        Leilao leilao = new CriadorDeLeilao().para("Playstation3").lance(joao, 200).lance(maria, 450).lance(joao, 120)
+                .lance(maria, 700).lance(maria, 630).lance(maria, 230).constroi();
 
         leiloeiro.avalia(leilao);
 
-        assertEquals(700.0, leiloeiro.maiorLance(), 0.0001);
-        assertEquals(120.0, leiloeiro.menorLance(), 0.0001);
+        assertThat(leiloeiro.maiorLance(), is(700.0));
+        assertThat(leiloeiro.menorLance(), is(120.0));
     }
 
-    @Test 
-    public void lancesEmOrdemDescrescente() {
-        Leilao leilao = new CriadorDeLeilao().para("Playstation3")
-                .lance(joao, 400)
-                .lance(maria, 200)
-                .lance(joao, 300)
-                .lance(maria, 100)
-                .constroi();
+    @Test
+    public void lancesEmOrdemDecrescente() {
+        Leilao leilao = new CriadorDeLeilao().para("Playstation3").lance(joao, 400).lance(maria, 200).lance(joao, 300)
+                .lance(maria, 100).constroi();
 
         leiloeiro.avalia(leilao);
 
-        assertEquals(100.0, leiloeiro.menorLance(), 0.0001);
-        assertEquals(400.0, leiloeiro.maiorLance(), 0.0001);
+        assertThat(leiloeiro.menorLance(), is(100.0));
+        assertThat(leiloeiro.maiorLance(), is(400.0));
     }
 
     @Test
     public void mediaDosLances() {
-        Leilao leilao = new CriadorDeLeilao().para("Playstation3")
-                .lance(joao, 250)
-                .lance(maria, 300)
-                .lance(joao, 400)
+        Leilao leilao = new CriadorDeLeilao().para("Playstation3").lance(joao, 250).lance(maria, 300).lance(joao, 400)
                 .constroi();
 
         leiloeiro.avalia(leilao);
 
-        assertEquals(316.66, leiloeiro.mediaDosLances(), 1);
+        assertThat(leiloeiro.mediaDosLances(), is(316.6666666666667));
     }
 
     @Test
     public void mediaDosLancesZero() {
-        Leilao leilao = new CriadorDeLeilao().para("Playstation3")
-                .constroi();
+        Leilao leilao = new CriadorDeLeilao().para("Playstation3").constroi();
 
         leiloeiro.avalia(leilao);
 
-        assertEquals(0, leiloeiro.mediaDosLances(), 0.0001);
+        assertThat(leiloeiro.mediaDosLances(), is(0));
     }
 
     @Test
     public void leilaoComApenasUmLance() {
-        Leilao leilao = new CriadorDeLeilao().para("Playstation3")
-                .lance(joao, 1000)
-                .constroi();
+        Leilao leilao = new CriadorDeLeilao().para("Playstation3").lance(joao, 1000).constroi();
 
         leiloeiro.avalia(leilao);
 
-        assertEquals(1000.0, leiloeiro.maiorLance(), 0.00001);
-        assertEquals(1000.0, leiloeiro.menorLance(), 0.00001);
-        assertEquals(1000.0, leiloeiro.mediaDosLances(), 0.00001);
+        assertThat(leiloeiro.maiorLance(), equalTo(1000.0));
+        assertThat(leiloeiro.menorLance(), equalTo(1000.0));
+        assertThat(leiloeiro.mediaDosLances(), equalTo(1000.0));
     }
 
     @Test
-    public void deveEncontrarOsTresMaioresLances() {
-        Leilao leilao = new CriadorDeLeilao().para("Playstation3")
-                .lance(joao, 100)
-                .lance(maria, 200)
-                .lance(joao, 300)
-                .lance(maria, 400)
-                .constroi();
+    public void tresMaioresLances() {
+        Leilao leilao = new CriadorDeLeilao().para("Playstation 3 Novo").lance(joao, 100).lance(maria, 200)
+                .lance(joao, 300).lance(maria, 400).constroi();
+
+        leiloeiro.avalia(leilao);
+
+        List<Lance> maiores = leiloeiro.tresMaioresLances();
+        assertThat(maiores.size(), is(3));
+
+        assertThat(maiores, hasItems(new Lance(maria, 400), new Lance(joao, 300), new Lance(maria, 200)));
+    }
+
+    @Test
+    public void tresMaioresLancesEmUmLeilaoComDoisLances() {
+        Leilao leilao = new CriadorDeLeilao().para("Playstation3").lance(joao, 100).lance(maria, 200).constroi();
 
         leiloeiro.avalia(leilao);
 
         List<Lance> maiores = leiloeiro.tresMaioresLances();
 
-        assertEquals(3, maiores.size());
-        assertEquals(400.0, maiores.get(0).valor(), 0.00001);
-        assertEquals(300.0, maiores.get(1).valor(), 0.00001);
-        assertEquals(200.0, maiores.get(2).valor(), 0.00001);
+        assertThat(maiores.size(), is(2));
+        assertThat(maiores.get(0).valor(), is(200.0));
+        assertThat(maiores.get(1).valor(), is(100.0));
     }
 
     @Test
-    public void deveEncontrarOsMaioresLancesEmUmLeilaoComDoisLances() {
-        Leilao leilao = new CriadorDeLeilao().para("Playstation3")
-                .lance(joao, 100)
-                .lance(maria, 200)
-                .constroi();
+    public void nenhumMaiorLanceEmUmLeilaoSemLances() {
+        Leilao leilao = new CriadorDeLeilao().para("Playstation3").constroi();
 
         leiloeiro.avalia(leilao);
 
         List<Lance> maiores = leiloeiro.tresMaioresLances();
 
-        assertEquals(2, maiores.size());
-        assertEquals(200.0, maiores.get(0).valor(), 0.00001);
-        assertEquals(100.0, maiores.get(1).valor(), 0.00001);
-    }
-
-    @Test
-    public void naoDeveEncontrarNenhumMaiorLanceEmUmLeilaoSemLances() {
-        Leilao leilao = new CriadorDeLeilao().para("Playstation3")
-                .constroi();
-
-        leiloeiro.avalia(leilao);
-
-        List<Lance> maiores = leiloeiro.tresMaioresLances();
-
-        assertEquals(0, maiores.size());
+        assertThat(maiores.size(), is(0));
     }
 }

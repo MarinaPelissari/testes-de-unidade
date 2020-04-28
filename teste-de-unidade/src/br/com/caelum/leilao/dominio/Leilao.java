@@ -33,7 +33,8 @@ public class Leilao {
 	}
 
 	private boolean podeDarUmLance(Usuario usuario) {
-		return !ultimoLanceDado().usuario().equals(usuario) && quantidadeDeLancesDo(usuario) < 5;
+		return !ultimoLanceDado().usuario().equals(usuario) 
+			&& quantidadeDeLancesDo(usuario) < 5;
 	}
 
 	private int quantidadeDeLancesDo(Usuario usuario) {
