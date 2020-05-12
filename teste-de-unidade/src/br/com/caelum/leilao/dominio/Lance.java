@@ -1,10 +1,10 @@
 package br.com.caelum.leilao.dominio;
 
 public class Lance {
-
 	private Usuario usuario;
 	private double valor;
-
+	private int id;
+	
 	public Lance(Usuario usuario, double valor) {
 		this.usuario = usuario;
 		this.valor = valor;
@@ -16,6 +16,17 @@ public class Lance {
 
 	public double valor() {
 		return valor;
+	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((usuario == null) ? 0 : usuario.hashCode());
+		long temp;
+		temp = Double.doubleToLongBits(valor);
+		result = prime * result + (int) (temp ^ (temp >>> 32));
+		return result;
 	}
 
 	@Override
@@ -32,8 +43,17 @@ public class Lance {
 				return false;
 		} else if (!usuario.equals(other.usuario))
 			return false;
-		if (Double.doubleToLongBits(valor) != Double.doubleToLongBits(other.valor))
+		if (Double.doubleToLongBits(valor) != Double
+				.doubleToLongBits(other.valor))
 			return false;
 		return true;
+	}
+
+	public int id() {
+		return id;
+	}
+	
+	public void id(int id) {
+		this.id = id;
 	}
 }

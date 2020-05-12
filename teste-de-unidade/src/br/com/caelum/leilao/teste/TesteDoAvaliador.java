@@ -89,7 +89,7 @@ public class TesteDoAvaliador {
 
         leiloeiro.avalia(leilao);
 
-        assertThat(leiloeiro.mediaDosLances(), is(316.6666666666667));
+        assertThat(leiloeiro.mediaDosLances(leilao), is(316.6666666666667));
     }
 
     @Test
@@ -98,7 +98,7 @@ public class TesteDoAvaliador {
 
         leiloeiro.avalia(leilao);
 
-        assertThat(leiloeiro.mediaDosLances(), is(0));
+        assertThat(leiloeiro.mediaDosLances(leilao), is(0));
     }
 
     @Test
@@ -107,13 +107,13 @@ public class TesteDoAvaliador {
 
         leiloeiro.avalia(leilao);
 
-        assertThat(leiloeiro.maiorLance(), equalTo(1000.0));
-        assertThat(leiloeiro.menorLance(), equalTo(1000.0));
-        assertThat(leiloeiro.mediaDosLances(), equalTo(1000.0));
+        assertThat(leiloeiro.maiorLance(), is(1000.0));
+        assertThat(leiloeiro.menorLance(), is(1000.0));
+        assertThat(leiloeiro.mediaDosLances(leilao), is(1000.0));
     }
 
     @Test
-    public void tresMaioresLances() {
+    public void tresMaioresLancesLances() {
         Leilao leilao = new CriadorDeLeilao().para("Playstation 3 Novo").lance(joao, 100).lance(maria, 200)
                 .lance(joao, 300).lance(maria, 400).constroi();
 
@@ -126,7 +126,7 @@ public class TesteDoAvaliador {
     }
 
     @Test
-    public void tresMaioresLancesEmUmLeilaoComDoisLances() {
+    public void tresMaioresLancesLancesEmUmLeilaoComDoisLances() {
         Leilao leilao = new CriadorDeLeilao().para("Playstation3").lance(joao, 100).lance(maria, 200).constroi();
 
         leiloeiro.avalia(leilao);
