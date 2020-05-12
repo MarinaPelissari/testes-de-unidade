@@ -1,25 +1,16 @@
 package br.com.caelum.leilao.dominio;
 
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Collections;
 import java.util.List;
 
 public class Leilao {
 
 	private String descricao;
-	private Calendar data;
 	private List<Lance> lances;
-	private boolean encerrado;
-	private int id;
 
 	public Leilao(String descricao) {
-		this(descricao, Calendar.getInstance());
-	}
-
-	public Leilao(String descricao, Calendar data) {
 		this.descricao = descricao;
-		this.data = data;
 		this.lances = new ArrayList<Lance>();
 	}
 
@@ -33,26 +24,6 @@ public class Leilao {
 
 	public List<Lance> lances() {
 		return Collections.unmodifiableList(lances);
-	}
-
-	public Calendar data() {
-		return (Calendar) data.clone();
-	}
-
-	public void encerra() {
-		this.encerrado = true;
-	}
-	
-	public boolean isEncerrado() {
-		return encerrado;
-	}
-
-	public int id() {
-		return id;
-	}
-
-	public void setId(int id) {
-		this.id = id;
 	}
 
 	public void propoe(Lance lance) {
