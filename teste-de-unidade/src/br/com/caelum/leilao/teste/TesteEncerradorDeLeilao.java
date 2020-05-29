@@ -18,8 +18,8 @@ import org.junit.Test;
 import br.com.caelum.leilao.builder.CriadorDeLeilao;
 import br.com.caelum.leilao.dominio.Leilao;
 import br.com.caelum.leilao.infra.dao.RepositorioDeLeiloes;
+import br.com.caelum.leilao.infra.email.Carteiro;
 import br.com.caelum.leilao.servico.EncerradorDeLeilao;
-import br.com.caelum.leilao.servico.EnviadorDeEmail;
 
 public class TesteEncerradorDeLeilao {
     

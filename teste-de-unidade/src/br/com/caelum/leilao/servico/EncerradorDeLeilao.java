@@ -5,14 +5,15 @@ import java.util.List;
 
 import br.com.caelum.leilao.dominio.Leilao;
 import br.com.caelum.leilao.infra.dao.RepositorioDeLeiloes;
+import br.com.caelum.leilao.infra.email.Carteiro;
 
 public class EncerradorDeLeilao {
 
     private int total = 0;
     private final RepositorioDeLeiloes dao;
-    private final EnviadorDeEmail carteiro;
+    private final Carteiro carteiro;
 
-    public EncerradorDeLeilao(RepositorioDeLeiloes dao, EnviadorDeEmail carteiro) {
+    public EncerradorDeLeilao(RepositorioDeLeiloes dao, Carteiro carteiro) {
         this.dao = dao;
         this.carteiro = carteiro;
     }
