@@ -3,6 +3,7 @@ package br.com.caelum.leilao.teste;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.Mockito.inOrder;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.times;
@@ -13,7 +14,11 @@ import java.util.Arrays;
 import java.util.Calendar;
 import java.util.List;
 
+import org.junit.Assert;
+import org.junit.Before;
 import org.junit.Test;
+import org.mockito.InOrder;
+import org.mockito.Mockito;
 
 import br.com.caelum.leilao.builder.CriadorDeLeilao;
 import br.com.caelum.leilao.dominio.Leilao;
@@ -108,5 +113,21 @@ public class TesteEncerradorDeLeilao {
 
         verify(daoFalso, never()).atualiza(leilao1);
         verify(daoFalso, never()).atualiza(leilao2);
+    }
+
+    @Test 
+    public void leilaoFoiEnviadoPorEmail() {
+        Calendar antiga = Calendar.getInstance();
+        antiga.set(1999, 1, 20);
+
+        Leilao leilao = new CriadorDeLeilao().para("iPhone").naData(antiga).constroi();
+
+        when(daoFalso.correntes()).thenReturn(Arrays.asList(leilao));
+
+        encerrador.encerra();
+
+        InOrder inOrder = inOrder(daoFalso, carteiroFalso);
+        inOrder.verify(daoFalso, times(1)).atualiza(leilao);
+        inOrder.verify(carteiroFalso, times(1)).envia(leilao);
     }
 }
