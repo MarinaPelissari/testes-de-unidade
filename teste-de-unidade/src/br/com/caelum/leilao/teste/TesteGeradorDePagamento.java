@@ -61,3 +61,51 @@ public class TesteGeradorDePagamento {
         assertEquals(2500.0, pagamentoGerado.valor());
     }
 
+    @Test
+    public void deveGerarPagamentoDoSabadoParaOProximoDiaUtil() {
+        Relogio relogio = mock(Relogio.class);
+
+        Calendar sabado = Calendar.getInstance();
+        sabado.set(2012, Calendar.APRIL, 7);
+
+        when(relogio.hoje()).thenReturn(sabado);
+
+        Leilao leilao = new CriadorDeLeilao().para("Playstation").lance(joao, 2000.0).lance(maria, 2500.0).constroi();
+
+        when(leiloes.encerrados()).thenReturn(Arrays.asList(leilao));
+
+        GeradorDePagamento gerador = new GeradorDePagamento(leiloes, pagamentos, new Avaliador(), relogio);
+        gerador.gera();
+
+        ArgumentCaptor<Pagamento> argumento = ArgumentCaptor.forClass(Pagamento.class);
+        verify(pagamentos).salva(argumento.capture());
+        Pagamento pagamentoGerado = argumento.getValue();
+
+        assertEquals(Calendar.MONDAY, pagamentoGerado.data().get(Calendar.DAY_OF_WEEK));
+        assertEquals(9, pagamentoGerado.data().get(Calendar.DAY_OF_MONTH));
+    }
+
+    @Test
+    public void deveGerarPagamentoDoDomingoParaOProximoDiaUtil() {
+        Relogio relogio = mock(Relogio.class);
+
+        Calendar sabado = Calendar.getInstance();
+        sabado.set(2012, Calendar.APRIL, 8);
+
+        when(relogio.hoje()).thenReturn(sabado);
+
+        Leilao leilao = new CriadorDeLeilao().para("Playstation").lance(joao, 2000.0).lance(maria, 2500.0).constroi();
+
+        when(leiloes.encerrados()).thenReturn(Arrays.asList(leilao));
+
+        GeradorDePagamento gerador = new GeradorDePagamento(leiloes, pagamentos, new Avaliador(), relogio);
+        gerador.gera();
+
+        ArgumentCaptor<Pagamento> argumento = ArgumentCaptor.forClass(Pagamento.class);
+        verify(pagamentos).salva(argumento.capture());
+        Pagamento pagamentoGerado = argumento.getValue();
+
+        assertEquals(Calendar.MONDAY, pagamentoGerado.data().get(Calendar.DAY_OF_WEEK));
+        assertEquals(9, pagamentoGerado.data().get(Calendar.DAY_OF_MONTH));
+    }
+}

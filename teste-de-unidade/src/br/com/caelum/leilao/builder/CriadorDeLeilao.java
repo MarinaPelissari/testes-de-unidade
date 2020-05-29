@@ -47,5 +47,4 @@ public class CriadorDeLeilao {
 				
 		return leilao;
 	}
-
 }
