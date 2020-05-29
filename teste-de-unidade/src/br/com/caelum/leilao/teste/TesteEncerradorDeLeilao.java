@@ -3,6 +3,8 @@ package br.com.caelum.leilao.teste;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.Matchers.any;
+import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.inOrder;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.never;
@@ -129,5 +131,58 @@ public class TesteEncerradorDeLeilao {
         InOrder inOrder = inOrder(daoFalso, carteiroFalso);
         inOrder.verify(daoFalso, times(1)).atualiza(leilao);
         inOrder.verify(carteiroFalso, times(1)).envia(leilao);
+    }
+
+    @Test
+    public void deveContinuarExecucaoMesmoQuandoDaoFalha() {
+        Calendar antiga = Calendar.getInstance();
+        antiga.set(1999, 1, 20);
+
+        Leilao leilao1 = new CriadorDeLeilao().para("Notebook").naData(antiga).constroi();
+        Leilao leilao2 = new CriadorDeLeilao().para("Macbook").naData(antiga).constroi();
+
+        when(daoFalso.correntes()).thenReturn(Arrays.asList(leilao1, leilao2));
+
+        doThrow(new RuntimeException()).when(daoFalso).atualiza(leilao1);
+
+        encerrador.encerra();
+
+        verify(daoFalso).atualiza(leilao2);
+        verify(carteiroFalso).envia(leilao2);
+    }
+
+    @Test
+    public void deveContinuarExecucaoMesmoQuandoEncerradorFalha() {
+        Calendar antiga = Calendar.getInstance();
+        antiga.set(1999, 1, 20);
+
+        Leilao leilao1 = new CriadorDeLeilao().para("Smartphone").naData(antiga).constroi();
+        Leilao leilao2 = new CriadorDeLeilao().para("Smartphone").naData(antiga).constroi();
+
+        when(daoFalso.correntes()).thenReturn(Arrays.asList(leilao1, leilao2));
+
+        doThrow(new RuntimeException()).when(carteiroFalso).envia(leilao1);
+
+        encerrador.encerra();
+
+        verify(daoFalso).atualiza(leilao2);
+        verify(carteiroFalso).envia(leilao2);
+    }
+
+    @Test
+    public void deveContinuarExecucaoMesmoQuandoTudoFalha() {
+        Calendar antiga = Calendar.getInstance();
+        antiga.set(1999, 1, 20);
+
+        Leilao leilao1 = new CriadorDeLeilao().para("Fones").naData(antiga).constroi();
+        Leilao leilao2 = new CriadorDeLeilao().para("Fones").naData(antiga).constroi();
+
+        when(daoFalso.correntes()).thenReturn(Arrays.asList(leilao1, leilao2));
+
+        doThrow(new RuntimeException()).when(daoFalso).atualiza(any(Leilao.class));
+
+        encerrador.encerra();
+
+        verify(carteiroFalso, never()).envia(any(Leilao.class));
     }
 }
