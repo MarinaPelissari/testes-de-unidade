@@ -38,6 +38,7 @@ public class EncerradorDeLeilao {
 	private int diasEntre(Calendar inicio, Calendar fim) {
 		Calendar data = (Calendar) inicio.clone();
 		int diasNoIntervalo = 0;
+		
 		while (data.before(fim)) {
 			data.add(Calendar.DAY_OF_MONTH, 1);
 			diasNoIntervalo++;
